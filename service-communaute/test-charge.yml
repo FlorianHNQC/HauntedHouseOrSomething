@@ -1,0 +1,13 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 30
+      arrivalRate: 10
+      rampTo: 50
+      name: "Afflux de passionnés d'horreur"
+
+scenarios:
+  - name: "Création d'un article communautaire (Simulé)"
+    flow:
+      - get:
+          url: "/api/echanges/articles"
