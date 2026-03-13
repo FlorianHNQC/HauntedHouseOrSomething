@@ -10,6 +10,9 @@ jobs:
   integration-et-tests:
     name: Build, Tests et Scan Sécurité
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./service-communaute
     steps:
       - name: 📥 Récupération du code
         uses: actions/checkout@v3
@@ -19,6 +22,7 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: './service-communaute/package-lock.json'
 
       - name: 📦 Installation des dépendances
         run: npm ci
@@ -34,13 +38,11 @@ jobs:
 
   packaging-docker:
     name: Création de l'Image Docker
-    needs: integration-et-tests # Ne se lance QUE si les tests et le scan réussissent
+    needs: integration-et-tests
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Récupération du code
         uses: actions/checkout@v3
 
       - name: 🐳 Build de l'image Docker
-        # Nous simulons ici le build de l'image pour valider le processus.
-        # En production, une étape de 'push' vers un registre (ex: Docker Hub) suivrait.
-        run: docker build -t maison-epouvante-api:latest .
+        run: docker build -t maison-epouvante-api:latest ./service-communaute
