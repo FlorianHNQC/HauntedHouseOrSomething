@@ -1,69 +1,67 @@
-### 🗺️ ROADMAP DU PROJET : "La Petite Maison de l'Épouvante"
+# Feuille de Route Stratégique : Projet "La Petite Maison de l'Épouvante"
 
-#### **Étape 1 : Cadrage et Expérimentation (Bac à sable) ⏳ *À faire en premier***
-*L'objectif est de figer les choix techniques sans dépenser d'argent, en pensant à votre équipe de juniors.*
+**Objectif :** Valider le bloc de compétences "Superviser et assurer le développement des applications logicielles" (Cible : Grade A - 16 à 20 points).
+**Rôle :** Lead Developer / Architecte Logiciel.
 
-*   **Action 1.1 : Le Backlog (User Story).** Rédigez formellement la fonctionnalité du POC : *"En tant qu'utilisateur authentifié, je peux soumettre un article horrifique/fantastique (titre, description) pour l'espace d'échange communautaire."*
-*   **Action 1.2 : Protocole d'expérimentation en bac à sable (`PROTOCOLE_EXPERIMENTATION.md`).**
-    *   *Test 1 :* NestJS vs Express (Justification : NestJS impose une structure stricte, idéale pour encadrer vos 2 développeurs juniors).
-    *   *Test 2 :* PostgreSQL vs MongoDB (Justification : Postgres est robuste pour le futur e-commerce, et gère le JSON pour la flexibilité des articles de troc).
-    *   *Test 3 :* Minikube (Justification : Test de déploiement local simulant un vrai cluster Kubernetes sans frais Cloud).
-*   **Action 1.3 : Schéma d'Architecture.** Dessinez le schéma cible : Front-end (virtuel pour le POC) ➔ API Gateway / Ingress ➔ Service Communauté (NestJS) ➔ BDD (Postgres) + Serveur d'Auth (Keycloak).
-🎯 **Points visés : 2 pts (Expérimentation) + Préparation pour les 4 pts d'Architecture.**
+## Phase 1 : Conception, Stratégie et Cadrage (Travail Préparatoire)
+*Cette phase sécurise les fondations théoriques et justifie les choix techniques.*
 
-#### **Étape 2 : Développement du POC (Le cœur du métier) ⏳ *Le plus gros du travail technique***
-*On implémente l'architecture validée.*
+*   **Tâche 1.1 : Définition du Backlog Fonctionnel**
+    *   *Action :* Rédiger la User Story principale du POC ("Proposition d'un article à l'échange communautaire") avec ses critères d'acceptation.
+    *   *Livrable :* Document `BACKLOG.md`.
+*   **Tâche 1.2 : Cartographie des Compétences et Formation**
+    *   *Action :* Évaluer l'équipe (1 Lead, 2 Juniors) face aux besoins Cloud-Native et proposer un plan d'action.
+    *   *Livrable :* Document `PLAN_FORMATION.md` *(Terminé et validé)*.
+*   **Tâche 1.3 : Formalisation du Cycle DevSecOps**
+    *   *Action :* Définir les mesures de sécurité "Shift-Left" appliquées à chaque étape du SDLC.
+    *   *Livrable :* Document `CYCLE_DEVSECOPS.md` *(Terminé et validé)*.
+*   **Tâche 1.4 : Protocole d'Expérimentation ("Bac à Sable")**
+    *   *Action :* Justifier l'adoption de NestJS (vs Express), PostgreSQL (vs MongoDB) et Keycloak, en fonction du contexte de l'équipe et des besoins de l'entreprise.
+    *   *Livrable :* Document `PROTOCOLE_EXPERIMENTATION.md`.
+*   **Tâche 1.5 : Modélisation de l'Architecture**
+    *   *Action :* Produire le schéma d'architecture cible incluant les contraintes géographiques (Hébergement Europe), légales (RGAA), sécuritaires (HTTPS/Keycloak) et de scalabilité (HPA).
+    *   *Livrable :* Schéma d'architecture (Format image) *(Terminé et validé)*.
 
-*   **Action 2.1 : Initialisation NestJS & Keycloak.**
-    *   Générez le projet NestJS.
-    *   Montez un conteneur Docker Keycloak localement. Créez un "Realm" *MaisonEpouvante* et un utilisateur de test.
-*   **Action 2.2 : Développement de la route métier.**
-    *   Codez le endpoint `POST /api/echanges/articles`.
-    *   Connectez-le à PostgreSQL (via TypeORM ou Prisma).
-    *   Protégez la route avec un Guard NestJS lié à Keycloak (l'utilisateur doit avoir un token JWT valide).
-*   **Action 2.3 : Observabilité basique.** Intégrez un logger (ex: `winston` sur NestJS) pour tracer les appels API dans la console (cela valide le critère "composante de l'observabilité").
-🎯 **Points visés : 4 pts (Implémentation architecture) + 1 pt (Fonctionnalité métier). Cumul potentiel : 7/20.**
+## Phase 2 : Implémentation du Socle Technique (Développement du POC)
+*Cette phase démontre la capacité à produire un code structuré, sécurisé et observable.*
 
-#### **Étape 3 : Assurance Qualité & Tests ⏳ *La preuve que votre code est robuste***
-*Un Lead Dev ne livre pas sans tests.*
+*   **Tâche 2.1 : Initialisation de l'Environnement de Développement**
+    *   *Action :* Générer le projet NestJS. Configurer un fichier `docker-compose.yml` local pour instancier la base de données (PostgreSQL) et le gestionnaire d'identités (Keycloak).
+*   **Tâche 2.2 : Développement de la Fonctionnalité Métier**
+    *   *Action :* Implémenter le contrôleur et le service applicatif (ex: `POST /api/echanges/articles`). Intégrer la communication avec PostgreSQL via un ORM (TypeORM ou Prisma).
+*   **Tâche 2.3 : Sécurisation et Observabilité de l'API**
+    *   *Action :* Intégrer la validation des jetons JWT (Keycloak) pour protéger la route métier. Mettre en place une journalisation structurée (logs applicatifs via la librairie Winston) pour tracer les requêtes.
 
-*   **Action 3.1 : Rédaction de `STRATEGIE_TEST.md`.** Formalisez l'utilisation de Jest pour l'unitaire et l'E2E.
-*   **Action 3.2 : Implémentation des tests.**
-    *   Écrivez au moins 2 tests unitaires (ex: tester le service qui formate les données de l'article).
-    *   Écrivez 1 test d'intégration/E2E (ex: simuler l'appel à la route `POST` et vérifier que la base de données est modifiée).
-*   **Action 3.3 : Définition de `INDICATEURS_QUALITE.md`.** Listez 4 métriques ISO 25010 pertinentes (ex: 1. Couverture de code > 80% [Maintenabilité], 2. Temps de réponse < 200ms [Performance], 3. Zéro faille critique au scan npm [Sécurité], 4. Taux de succès des builds [Fiabilité]). Expliquez comment cela évite la dette technique.
-🎯 **Points visés : 2 pts (Processus de tests) + 1 pt (Indicateurs). Cumul potentiel : 10/20.**
+## Phase 3 : Assurance Qualité et Intégration Continue (CI/CD)
+*Cette phase valide les compétences en ingénierie logicielle et automatisation.*
 
-#### **Étape 4 : CI/CD et Déploiement Orchestré ⏳ *L'automatisation à 0€***
-*C'est ici qu'on valide la compétence DevOps.*
+*   **Tâche 3.1 : Définition de la Stratégie d'Assurance Qualité**
+    *   *Action :* Définir 4 indicateurs basés sur la norme ISO 25010 (ex: couverture de code, temps de réponse) et leur impact sur la dette technique. Formaliser l'approche de test.
+    *   *Livrables :* Documents `INDICATEURS_QUALITE.md` et `STRATEGIE_TEST.md`.
+*   **Tâche 3.2 : Implémentation des Tests Automatisés**
+    *   *Action :* Coder au minimum deux types de tests : Tests unitaires (isolation des services) et Tests d'intégration/E2E (validation de la route API complète).
+*   **Tâche 3.3 : Conception du Pipeline CI/CD**
+    *   *Action :* Rédiger le fichier de configuration (GitLab CI ou GitHub Actions) incluant les étapes : Build, Test, Scan de vulnérabilités (`npm audit` / Trivy), et Packaging (création de l'image Docker).
+    *   *Livrable :* Schéma du pipeline CI/CD et fichier `.gitlab-ci.yml` ou `.github/workflows/main.yml`.
 
-*   **Action 4.1 : Pipeline CI/CD.** Créez un fichier GitHub Actions (`.github/workflows/main.yml`) ou GitLab CI.
-    *   *Étapes du pipeline :* Build de l'app ➔ Exécution des tests Jest ➔ Scan de vulnérabilités (`npm audit`) ➔ Création de l'image Docker.
-*   **Action 4.2 : Schématisation CI/CD.** Faites un diagramme propre de ce pipeline pour votre présentation (`SCHEMA_CICD.png`).
-*   **Action 4.3 : Déploiement local (Minikube ou Docker Compose).**
-    *   Créez les fichiers de déploiement pour faire tourner le POC, Postgres et Keycloak ensemble sur votre machine. L'utilisation de **Minikube** (Kubernetes local) est fortement recommandée pour cocher parfaitement la case "orchestrateur" du sujet.
-🎯 **Points visés : 3 pts (CI/CD) + 2 pts (Environnement managé/Montée en charge - *la montée en charge sera prouvée en soutenance*). Cumul potentiel : 15/20 (Grade B sécurisé !).**
+## Phase 4 : Déploiement Orchestré, Scalabilité et Audit
+*Cette phase justifie les points les plus techniques de la grille d'évaluation (Environnement managé, montée en charge, remédiation).*
 
-#### **Étape 5 : Analyse de Sécurité et Management d'Équipe ⏳ *Les points de l'expertise Lead Dev***
-*On prend de la hauteur sur le projet.*
+*   **Tâche 4.1 : Déploiement sur Orchestrateur (Minikube)**
+    *   *Action :* Écrire les manifestes Kubernetes (`Deployment`, `Service`). Configurer un `Ingress Controller` pour assurer la terminaison HTTPS (sécurité minimale). Configurer un `Horizontal Pod Autoscaler` (HPA) pour la gestion de la charge.
+*   **Tâche 4.2 : Test de Montée en Charge**
+    *   *Action :* Exécuter un tir de charge (via JMeter ou K6) contre l'API déployée.
+    *   *Livrable :* Captures d'écran et extraction des métriques prouvant le déclenchement du HPA (création automatique de nouveaux pods) et le maintien de la disponibilité.
+*   **Tâche 4.3 : Audit et Plan de Remédiation Sécurité**
+    *   *Action :* Analyser les résultats des tests et l'architecture du POC. Rédiger des préconisations d'amélioration sécuritaire (ex: gestion des secrets K8s, analyse DAST approfondie).
+    *   *Livrable :* Document `PLAN_REMEDIATION.md`.
 
-*   **Action 5.1 : Audit et `PLAN_REMEDIATION_SECURITE.md`.**
-    *   Analysez votre POC v1. Identifiez des failles (ex: Les secrets de base de données sont peut-être en clair dans un fichier config ? Il manque du HTTPS (TLS) en local ?).
-    *   Proposez un plan d'action priorisé.
-    *   Listez les 2 bonnes pratiques déjà intégrées (Auth déléguée à Keycloak + Scan npm dans la CI).
-*   **Action 5.2 : Bilan de compétences (`PLAN_FORMATION.md`).**
-    *   Constatez que vos 2 juniors viennent du monde de l'alternance et ne maîtrisent peut-être pas les microservices.
-    *   Proposez une formation : *"Atelier de 3 jours : Conteneurisation et déploiement d'API NestJS sur Kubernetes pour développeurs juniors"*.
-🎯 **Points visés : 2 pts (Remédiation) + 1 pt (Formation). Cumul potentiel : 18/20 (Grade A atteint !).**
+## Phase 5 : Préparation de la Soutenance
+*Phase de restitution et de valorisation du travail accompli.*
 
-#### **Étape 6 : Préparation de la Soutenance (Le Jour J) ⏳ *Ne pas trébucher sur la ligne d'arrivée***
-*Le sujet précise qu'il s'agit d'une évaluation "technique" face à des "spécialistes".*
-
-*   **Action 6.1 : Le Diaporama.** Limitez le texte. Mettez en valeur vos beaux schémas (Architecture, DevSecOps, CI/CD).
-*   **Action 6.2 : La Démo Vidéo (CRUCIAL).** Le sujet le conseille explicitement : enregistrez votre écran montrant le POC en train de fonctionner (Keycloak, envoi de l'article) ET le test de charge. **Utilisez JMeter ou K6 en local** pour bombarder votre API (ex: 50 requêtes concurrentes) et filmez les résultats prouvant qu'elle tient la charge. Cela évite l'effet démo en direct.
-*   **Action 6.3 : Chronométrage.** Répétez votre pitch pour qu'il dure exactement entre 18 et 20 minutes.
-🎯 **Points visés : 1 pt (Supports) + 1 pt (Prestation orale). Cumul potentiel : 20/20.**
-
----
-**💡 Conseil de pro pour démarrer tout de suite :**
-Créez immédiatement l'arborescence de votre dossier de rendu avec tous les fichiers `.md` vides nommés comme indiqué ci-dessus. Cela vous fera un squelette psychologique du travail à accomplir !
+*   **Tâche 5.1 : Création du Support de Présentation**
+    *   *Action :* Élaborer un diaporama épuré, axé sur les schémas d'architecture et les processus (CI/CD, DevSecOps), destiné à une audience de spécialistes techniques.
+*   **Tâche 5.2 : Enregistrement de la Démonstration (Secours)**
+    *   *Action :* Réaliser une capture vidéo fluide démontrant l'authentification (Keycloak), le fonctionnement de l'API, et surtout la réaction de l'orchestrateur (HPA) lors du test de charge.
+*   **Tâche 5.3 : Répétition Chronométrée**
+    *   *Action :* Calibrer le discours pour respecter scrupuleusement le format exigé (20 minutes d'exposé).
