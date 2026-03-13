@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # 1. Bd app NestJS
+  postgres:
+    image: postgres:15-alpine
+    container_name: db-epouvante
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: epouvante_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  # 2. Auth Keycloak
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: auth-epouvante
+    command: start-dev # Mode dev pour le POC
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+
+volumes:
+  pg_data:
