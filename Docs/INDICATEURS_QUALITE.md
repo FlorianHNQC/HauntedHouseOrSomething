@@ -1,7 +1,9 @@
 # Suivi des Indicateurs de Qualité Logicielle
 
 **Projet :** Plateforme "La Petite Maison de l'Épouvante"
+
 **Rédacteur :** Lead Developer / Architecte Logiciel
+
 **Référentiel :** Norme ISO/IEC 25010
 
 Afin de piloter le développement du POC et de garantir la viabilité de la plateforme sur le long terme, quatre indicateurs de qualité ont été définis. Leur suivi systématique vise à prévenir l'accumulation de dette technique.

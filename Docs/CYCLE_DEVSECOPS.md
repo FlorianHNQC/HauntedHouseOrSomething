@@ -1,7 +1,9 @@
 # Cycle de Vie de Développement : Démarche DevSecOps
 
 **Projet :** Plateforme "La Petite Maison de l'Épouvante"
+
 **Rédacteur :** Lead Developer / Architecte Logiciel
+
 **Objectif :** Formaliser l'intégration continue de la sécurité ("Shift-Left") à chaque étape du cycle de développement logiciel (SDLC) afin de garantir l'intégrité et la résilience de la plateforme.
 
 Le tableau ci-dessous détaille le processus DevSecOps cible. La colonne "Statut (V1)" précise les mesures appliquées dans le cadre de la preuve de concept actuelle.

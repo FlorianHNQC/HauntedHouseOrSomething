@@ -1,7 +1,9 @@
 # Audit de Sécurité et Plan de Remédiation
 
 **Projet :** Plateforme "La Petite Maison de l'Épouvante"
+
 **Rédacteur :** Lead Developer / Architecte Logiciel
+
 **Date :** 13 Mars 2026
 
 Ce document présente l'analyse de sécurité de la version 1 (POC) de l'API Communauté. Il recense les bonnes pratiques déjà implémentées ("Secure by Design") et priorise les actions correctives à mener avant une mise en production massive.
