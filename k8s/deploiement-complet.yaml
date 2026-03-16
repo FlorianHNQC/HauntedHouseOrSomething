@@ -1,0 +1,150 @@
+---
+#BDD Postre
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        env:
+        - name: POSTGRES_USER
+          value: "admin"
+        - name: POSTGRES_PASSWORD
+          value: "password123"
+        - name: POSTGRES_DB
+          value: "epouvante_db"
+        ports:
+        - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+
+---
+#Serveur Keycloak
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-deployment
+spec:
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:latest
+        args: ["start-dev"]
+        env:
+        - name: KEYCLOAK_ADMIN
+          value: "admin"
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          value: "admin"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-service
+spec:
+  selector:
+    app: keycloak
+  ports:
+    - port: 8080
+
+---
+#App nestjs
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-communaute-deployment
+spec:
+  replicas: 1 # On démarre à 1, le HPA augmentera si besoin !
+  selector:
+    matchLabels:
+      app: api-communaute
+  template:
+    metadata:
+      labels:
+        app: api-communaute
+    spec:
+      containers:
+      - name: api-communaute
+        image: maison-epouvante-api:latest
+        imagePullPolicy: Never # Utilise l'image qu'on vient de compiler dans Minikube
+        resources:
+          requests:
+            cpu: "50m" # Indispensable pour que le HPA puisse calculer la charge
+        env:
+        - name: KEYCLOAK_URL
+          value: "http://keycloak-service:8080"
+        - name: KEYCLOAK_REALM
+          value: "MaisonEpouvante"
+        - name: KEYCLOAK_CLIENT_ID
+          value: "api-communaute"
+        - name: KEYCLOAK_CLIENT_SECRET
+          value: "secret-factice-pour-le-poc"
+        - name: DB_HOST
+          value: "postgres-service"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: "admin"
+        - name: DB_PASS
+          value: "password123"
+        - name: DB_NAME
+          value: "epouvante_db"
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-communaute-service
+spec:
+  selector:
+    app: api-communaute
+  ports:
+    - port: 3000
+
+---
+#Autoscaling HPA
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-communaute-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-communaute-deployment
+  minReplicas: 1
+  maxReplicas: 5 # Va monter jusqu'à 5 conteneurs en cas de forte charge
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50 # Déclenche l'autoscaling si CPU > 50%
