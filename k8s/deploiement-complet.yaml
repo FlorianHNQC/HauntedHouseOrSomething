@@ -60,6 +60,10 @@ spec:
           value: "admin"
         - name: KEYCLOAK_ADMIN_PASSWORD
           value: "admin"
+        - name: KC_HOSTNAME_STRICT
+          value: "false"
+        - name: KC_HOSTNAME_URL
+          value: "http://keycloak-service:8080"
         ports:
         - containerPort: 8080
 ---
