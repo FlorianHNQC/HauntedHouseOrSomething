@@ -1,28 +1,26 @@
-# Stratégie de Test et Assurance Qualité
+# Stratégie de Validation et Processus de Test
 
 **Projet :** Plateforme "La Petite Maison de l'Épouvante"
 **Rédacteur :** Lead Developer / Architecte Logiciel
 
-Ce document formalise la stratégie de validation logicielle appliquée au périmètre du POC (Service Communauté), garantissant ainsi la conformité de l'application avant tout déploiement.
+Ce document définit la stratégie d'Assurance Qualité (QA) logicielle mise en œuvre sur le périmètre du Proof of Concept (POC), visant à garantir la conformité fonctionnelle et technique avant tout déploiement sur l'orchestrateur.
 
-## 1. Typologie des tests mis en œuvre
+## 1. Niveaux de validation (Pyramide des Tests)
 
-Conformément à la pyramide des tests, le processus intègre deux niveaux de validation distincts pour le POC :
+Le processus de test repose sur deux strates d'évaluation automatisées, exécutées par le framework Jest.
 
-### A. Tests Unitaires (Logique Métier Isolée)
-*   **Périmètre :** Les méthodes individuelles des classes de type `Service` (ex: `CommunauteService`).
-*   **Outil associé :** Jest (Framework de test Node.js).
-*   **Parties prenantes :** Développeurs.
-*   **Objectif :** Valider l'algorithmique interne de l'application en isolant le code de ses dépendances externes (la base de données PostgreSQL est simulée par des "Mocks").
+### A. Tests Unitaires (Validation de la logique métier)
+*   **Périmètre évalué :** Les classes de type `Service` contenant la valeur ajoutée algorithmique.
+*   **Méthodologie :** Isolation totale du code testé. Les dépendances externes, notamment les interactions avec le moteur de base de données PostgreSQL, sont simulées via des objets de substitution (Mocks).
+*   **Objectif technique :** Confirmer que l'application traite les données correctement indépendamment de l'état de l'infrastructure réseau ou de stockage.
 
-### B. Tests d'Intégration / End-to-End (E2E)
-*   **Périmètre :** Les points de terminaison de l'API (ex: la route `POST /api/echanges/articles`).
-*   **Outil associé :** Jest couplé à Supertest.
-*   **Parties prenantes :** Développeurs et Lead Developer (pour la validation des critères d'acceptation).
-*   **Objectif :** Simuler une requête HTTP entrante et vérifier que l'ensemble de la chaîne (Validation du DTO -> Contrôleur -> Service -> Enregistrement en Base de données) fonctionne de manière synchrone et cohérente.
+### B. Tests d'Intégration E2E (Validation des contrats d'interface)
+*   **Périmètre évalué :** Les points de terminaison (Endpoints) de l'API REST exposés par les `Controllers`.
+*   **Méthodologie :** Simulation complète du cycle de vie d'une requête HTTP. Le processus vérifie la bonne interaction entre les gardes de sécurité (extraction de l'identité Keycloak), la validation des DTO, l'appel au service, et le formatage de la réponse HTTP.
+*   **Objectif technique :** Garantir que les contrats d'API (requêtes et réponses) respectent strictement les critères d'acceptation définis dans les User Stories du Backlog.
 
-## 2. Intégration au cycle de vie (CI/CD)
+## 2. Automatisation et Intégration Continue (Usine Logicielle)
 
-Afin d'automatiser cette stratégie et d'interdire toute régression, l'exécution de ces deux typologies de tests est rendue obligatoire à chaque soumission de code (Pull Request). 
+La stratégie repose sur une politique de "Quality Gate" (barrière de qualité) stricte. 
 
-Le pipeline d'intégration continue est configuré pour faire échouer le processus de "Build" si un seul de ces tests ne retourne pas un code de succès. Les rapports générés servent à alimenter nos indicateurs de qualité (Couverture de code).
+L'exécution intégrale de ces deux suites de tests est systématisée à chaque soumission de code sur le gestionnaire de versions. Le pipeline de livraison continue (CI/CD) est configuré pour bloquer immédiatement la construction de l'image Docker applicative si une seule assertion de test renvoie un code d'erreur, interdisant de fait toute régression sur l'environnement cible.

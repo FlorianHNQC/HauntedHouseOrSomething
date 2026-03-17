@@ -1,29 +1,27 @@
-# Suivi des Indicateurs de Qualité Logicielle
+# Pilotage des Indicateurs de Qualité Logicielle
 
 **Projet :** Plateforme "La Petite Maison de l'Épouvante"
-
 **Rédacteur :** Lead Developer / Architecte Logiciel
-
 **Référentiel :** Norme ISO/IEC 25010
 
-Afin de piloter le développement du POC et de garantir la viabilité de la plateforme sur le long terme, quatre indicateurs de qualité ont été définis. Leur suivi systématique vise à prévenir l'accumulation de dette technique.
+Afin de garantir la pérennité de la plateforme applicative et de prévenir l'accumulation de dette technique, le pilotage de l'ingénierie repose sur le suivi systématique de quatre indicateurs de qualité fondamentaux.
 
-## 1. Maintenabilité : Couverture de Code par les Tests (Code Coverage)
-*   **Objectif visé :** > 80% de couverture sur la logique métier (Services).
-*   **Outil de mesure :** Jest (intégré au pipeline CI/CD).
-*   **Lutte contre la dette technique :** Un code non testé est un code "legacy" en devenir. Mesurer la couverture oblige les développeurs juniors à concevoir un code modulaire et testable, réduisant ainsi le risque de régression lors des futures mises à jour ou refactorisations.
+## 1. Maintenabilité : Taux de Couverture de Code (Code Coverage)
+*   **Objectif cible :** > 80% de couverture sur les modules de logique métier (Services).
+*   **Outil de mesure :** Framework Jest, automatisé via l'usine logicielle (CI).
+*   **Impact sur la dette technique :** L'absence de tests transforme rapidement le code en système "Legacy" inmaintenable. Ce suivi force la modularité du code et garantit qu'aucune régression fonctionnelle ne sera introduite lors des futures refactorisations.
 
-## 2. Sécurité : Taux de Vulnérabilités Critiques (Zero-Known-Vulnerabilities)
-*   **Objectif visé :** 0 vulnérabilité critique ou haute sur les dépendances.
-*   **Outil de mesure :** Outil d'analyse SCA (ex: `npm audit` ou Trivy) dans le pipeline CI.
-*   **Lutte contre la dette technique :** Mettre à jour des dépendances obsolètes des mois après leur déploiement coûte exponentiellement plus cher que de le faire en continu. Cet indicateur force la mise à jour régulière des paquets (Shift-Left Security), évitant une dette sécuritaire paralysante.
+## 2. Sécurité : Taux de Vulnérabilités Détectées (Zero-Known-Vulnerabilities)
+*   **Objectif cible :** 0 vulnérabilité de sévérité Haute ou Critique sur les dépendances.
+*   **Outil de mesure :** Outils d'analyse SCA (Software Composition Analysis) exécutés à chaque compilation (Pipeline CI).
+*   **Impact sur la dette technique :** La mise à jour différée de composants vulnérables génère un coût de remédiation exponentiel. Cette métrique impose une hygiène de sécurité en continu (Shift-Left Security), bloquant le déploiement de failles connues.
 
-## 3. Performance : Temps de Réponse de l'API (Latency)
-*   **Objectif visé :** < 200 ms pour le 95ème percentile (p95) sur les requêtes de lecture.
-*   **Outil de mesure :** Tests de charge automatisés (K6 / JMeter) exécutés sur l'environnement managé.
-*   **Lutte contre la dette technique :** Une dégradation lente des performances indique souvent des requêtes SQL mal optimisées (N+1 queries) ou un manque d'indexation. Cet indicateur permet de détecter ces anomalies architecturales avant qu'elles ne saturent la base de données en production.
+## 3. Performance : Latence du 95ème Percentile (p95 Response Time)
+*   **Objectif cible :** Temps de réponse < 200 millisecondes pour 95% du trafic sur les requêtes de lecture.
+*   **Outil de mesure :** Outils de test de charge distribués (Artillery / K6).
+*   **Impact sur la dette technique :** Une dégradation silencieuse des performances traduit généralement des anomalies architecturales (requêtes SQL non indexées, problèmes de N+1). Cette mesure prévient la saturation des bases de données en production en détectant les goulots d'étranglement dès la phase de test.
 
-## 4. Fiabilité : Taux de Succès des Déploiements (Build & Release Success Rate)
-*   **Objectif visé :** > 95% de succès sur la branche principale (`main`).
-*   **Outil de mesure :** Statistiques de l'outil CI/CD (GitHub Actions / GitLab CI).
-*   **Lutte contre la dette technique :** Des builds qui échouent fréquemment sont le symptôme d'environnements instables, de tests floconneux (flaky tests) ou de problèmes de configuration (le fameux "ça marche sur ma machine"). Suivre ce taux oblige l'équipe à fiabiliser les scripts de conteneurisation et l'infrastructure as code.
+## 4. Fiabilité : Taux de Succès de l'Intégration Continue (CI Success Rate)
+*   **Objectif cible :** > 95% de succès sur la branche de livraison principale.
+*   **Outil de mesure :** Métriques d'observabilité du pipeline de déploiement (GitHub Actions).
+*   **Impact sur la dette technique :** Des échecs fréquents du pipeline témoignent de tests instables (flaky tests) ou d'une configuration d'environnement asymétrique. Maintenir un taux de succès élevé garantit la fiabilité du processus de "Release" et la confiance de l'équipe dans les livrables.
