@@ -152,3 +152,5 @@ spec:
       target:
         type: Utilization
         averageUtilization: 50 # Déclenche l'autoscaling si CPU > 50%
+
+        #RTest
