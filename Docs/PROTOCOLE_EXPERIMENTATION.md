@@ -1,49 +1,35 @@
-# Protocole d'Expérimentation (Bac à sable) et Choix Techniques
+# Protocole d'Expérimentation et Choix Techniques
 
-**Projet :** Plateforme "La Petite Maison de l'Épouvante"
+**Date :** 18 Mars 2026
 
-**Rédacteur :** Lead Developer / Architecte Logiciel
+**Périmètre :** Validation du socle technologique global (E-commerce, Communauté, Temps Réel) via un POC ("Bac à sable").
 
-**Date :** Mars 2026
+## 1. Contexte et Objectifs
 
-## Contexte
+Préalablement au développement, une phase d'expérimentation en environnement isolé a été menée. L'objectif est d'évaluer la pertinence de plusieurs technologies critiques face aux contraintes du projet : encadrement d'une équipe de développeurs juniors, exigences strictes de sécurité (transactions e-commerce), et capacité à soutenir de fortes montées en charge (enchères, streaming).
 
-Préalablement au développement du socle technique, une phase d'expérimentation en environnement isolé ("bac à sable") a été menée. L'objectif était d'évaluer la pertinence de plusieurs technologies critiques face aux contraintes du projet : intégration d'une équipe de développeurs juniors, exigences strictes de sécurité (e-commerce), et capacité à soutenir de fortes montées en charge.
+## 2. Synthèse des Expérimentations
 
-Ce document synthétise les protocoles de tests, les résultats obtenus et les décisions d'architecture qui en découlent.
-
----
-
-### Expérimentation 1 : Sélection du Framework Backend (Serveur d'API)
-**Hypothèse :** L'écosystème Node.js/TypeScript est pertinent. Une comparaison entre Express.js (minimaliste) et NestJS (structuré) doit déterminer le meilleur outil pour encadrer le développement applicatif.
-
-*   **Protocole :** Développement d'un point de terminaison d'API REST intégrant la validation stricte de données entrantes (Data Transfer Object) sur les deux frameworks.
-*   **Résultats obtenus :** La mise en œuvre sous Express.js requiert l'agrégation manuelle de bibliothèques tierces (routage, validation, typage), générant une structure de code hétérogène. NestJS propose une architecture logicielle modulaire (contrôleurs, services, injecteurs de dépendances) nativement intégrée et fortement typée via TypeScript.
-*   **Décision technique :** **Adoption de NestJS.** Sa rigueur architecturale réduit le risque de dette technique et fournit un cadre de travail standardisé, sécurisant ainsi la montée en compétences des développeurs juniors.
-
----
+### Expérimentation 1 : Framework Backend (Serveur d'API)
+*   **Hypothèse :** L'écosystème Node.js/TypeScript est retenu. Une comparaison entre Express.js (minimaliste) et NestJS (structuré) doit déterminer l'outil le plus adapté pour encadrer l'équipe.
+*   **Protocole :** Développement d'un endpoint REST intégrant une validation stricte de données entrantes sur les deux frameworks.
+*   **Résultats :** Express.js requiert l'agrégation manuelle de bibliothèques tierces, générant une structure de code hétérogène. NestJS propose une architecture logicielle modulaire (contrôleurs, services, injection de dépendances) nativement intégrée et fortement typée.
+*   **Décision technique : Adoption de NestJS.** Sa rigueur architecturale réduit le risque de dette technique et fournit un cadre de travail standardisé sécurisant la montée en compétences des développeurs juniors.
 
 ### Expérimentation 2 : Système de Gestion de Base de Données (SGBD)
-**Hypothèse :** La plateforme nécessite le stockage de données hautement structurées (transactions commerciales) et semi-structurées (caractéristiques variables des articles d'échange). Évaluation de PostgreSQL (Relationnel) face à MongoDB (NoSQL orienté document).
-
+*   **Hypothèse :** La plateforme globale nécessite le stockage de données structurées (commandes e-commerce) et semi-structurées (articles d'échange communautaire). Évaluation de PostgreSQL (Relationnel) face à MongoDB (NoSQL).
 *   **Protocole :** Modélisation conceptuelle et insertion d'un "Article d'échange" intégrant des métadonnées flexibles dans les deux systèmes.
-*   **Résultats obtenus :** MongoDB offre une flexibilité immédiate pour les objets hétérogènes. Cependant, PostgreSQL démontre une capacité équivalente grâce à son type de colonne `JSONB`, tout en maintenant l'intégrité référentielle stricte et les transactions ACID.
-*   **Décision technique :** **Adoption de PostgreSQL.** La fiabilité transactionnelle est non négociable pour le volet e-commerce futur. L'utilisation du type `JSONB` répond parfaitement au besoin de flexibilité de l'espace communautaire, évitant ainsi la complexité de maintenir deux SGBD distincts en production.
-
----
+*   **Résultats :** MongoDB offre une flexibilité immédiate. Cependant, PostgreSQL démontre une capacité équivalente grâce à son type de colonne `JSONB`, tout en maintenant l'intégrité référentielle stricte et les transactions ACID.
+*   **Décision technique : Adoption de PostgreSQL.** La fiabilité transactionnelle est non négociable pour le volet e-commerce. Le type `JSONB` répond au besoin de flexibilité de l'espace communautaire, évitant la complexité d'opérer deux SGBD distincts en production.
 
 ### Expérimentation 3 : Sécurisation et Gestion des Identités (IAM)
-**Hypothèse :** Développer un système d'authentification interne présente un risque de vulnérabilité majeur (fuite de données, gestion des mots de passe). Test d'intégration d'un fournisseur d'identité tiers.
-
-*   **Protocole :** Déploiement d'une instance Keycloak. Configuration d'un royaume (Realm), création d'un client et tentative de sécurisation d'une route NestJS via la validation de jetons JWT (JSON Web Tokens).
-*   **Résultats obtenus :** L'intégration de la bibliothèque `@slickteam/nestjs-keycloak` a permis de sécuriser les points de terminaison en quelques lignes de configuration, externalisant totalement le traitement cryptographique et la gestion des mots de passe.
-*   **Décision technique :** **Adoption de Keycloak.** L'effort d'intégration est largement compensé par la conformité immédiate aux standards de l'industrie (OAuth 2.0 / OpenID Connect) et l'application du principe de conception sécurisée ("Secure by Design").
-
----
+*   **Hypothèse :** Développer un système d'authentification interne présente un risque de vulnérabilité majeur. Test d'intégration d'un fournisseur d'identité tiers (IAM).
+*   **Protocole :** Déploiement d'une instance Keycloak. Configuration d'un royaume (Realm), création d'un client "Confidential" et sécurisation d'une route NestJS via la validation de jetons JWT.
+*   **Résultats :** L'intégration a permis de sécuriser les endpoints en déportant totalement le traitement cryptographique et le stockage des mots de passe hors de la base de données métier.
+*   **Décision technique : Adoption de Keycloak.** L'effort d'intégration initial garantit la conformité immédiate aux standards de l'industrie (OAuth 2.0 / OpenID Connect) et l'application du principe "Secure by Design".
 
 ### Expérimentation 4 : Orchestration et Scalabilité (Environnement Managé)
-**Hypothèse :** L'utilisation de Docker Compose est adaptée au développement local, mais insuffisante pour garantir la haute disponibilité. Évaluation de Kubernetes (via Minikube) pour valider l'autoscaling dynamique.
-
-*   **Protocole :** Création de manifestes Kubernetes pour l'API. Configuration d'un Horizontal Pod Autoscaler (HPA) déclenché au-delà de 50% de consommation CPU. Injection d'un trafic réseau intense (tir de charge de 1800 requêtes en 30 secondes) via l'outil Artillery.
-*   **Résultats obtenus :** Le système de supervision interne (Metrics Server) a détecté un pic CPU de 76%. Le HPA a réagi de manière autonome en instanciant un second réplica du service NestJS. Le test de charge s'est conclu par un taux d'échec des requêtes de 0% et un temps de réponse critique (p95) maintenu sous les 20 millisecondes.
-*   **Décision technique :** **Adoption de Kubernetes.** Cette expérimentation valide formellement la capacité de l'architecture à s'exécuter dans un environnement managé et démontre mathématiquement la résilience et la montée en charge de l'application face à un afflux massif de trafic.
+*   **Hypothèse :** Docker Compose est adapté au développement, mais insuffisant pour garantir la haute disponibilité requise par le cahier des charges. Évaluation de Kubernetes (via Minikube) pour valider l'élasticité de l'infrastructure.
+*   **Protocole :** Déploiement de l'API sur Minikube. Configuration d'un Horizontal Pod Autoscaler (HPA) déclenché au-delà de 50% de consommation CPU. Injection d'un trafic réseau intense (1800 requêtes en 30 secondes) via l'outil de Load Testing Artillery.
+*   **Résultats :** Le système de supervision (Metrics Server) a détecté un pic CPU de 76%. Le HPA a réagi de manière autonome en instanciant un second réplica du service NestJS. Le test s'est conclu par un taux d'échec de 0% et un temps de réponse p95 maintenu à 15.3 millisecondes.
+*   **Décision technique : Adoption de Kubernetes.** L'expérimentation valide mathématiquement la résilience et la montée en charge de l'application face à un afflux massif de trafic. Docker Compose est relégué au strict environnement de développement local (Dev).

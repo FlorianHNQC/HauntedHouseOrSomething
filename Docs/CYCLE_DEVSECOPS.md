@@ -1,22 +1,25 @@
 # Cycle de Vie de Développement : Démarche DevSecOps
 
-**Projet :** Plateforme "La Petite Maison de l'Épouvante"
+**Date :** 18 Mars 2026
 
-**Rédacteur :** Lead Developer / Architecte Logiciel
+**Statut :** Vision globale de la plateforme et implémentation POC.
 
-**Objectif :** Formaliser l'intégration continue de la sécurité ("Shift-Left") à chaque étape du cycle de développement logiciel (SDLC) afin de garantir l'intégrité et la résilience de la plateforme.
+---
 
-Le tableau ci-dessous détaille le processus DevSecOps cible. La colonne "Statut (V1)" précise les mesures appliquées dans le cadre de la preuve de concept actuelle.
+## 1. Objectifs de la démarche
 
-| Phase du Cycle (SDLC) | Objectif de la Phase | Mesures de Sécurité & Outils DevSecOps | Statut (V1) |
-| :--- | :--- | :--- | :--- |
-| **1. Planification** | Définition des exigences et conception de l'architecture. | Modélisation des menaces (Threat Modeling). Intégration des contraintes RGPD (données utilisateurs) et RGAA (accessibilité Front-end). | Implémenté |
-| **2. Développement** | Écriture du code source applicatif. | Utilisation d'outils d'analyse statique dans l'IDE (ex: SonarLint). Mise en place de hooks de pré-validation (ex: gitleaks) pour prévenir la compromission de secrets. Revues de code obligatoires. | Implémenté |
-| **3. Construction** | Compilation, gestion des dépendances et conteneurisation. | Analyse statique de sécurité (SAST) via l'intégration continue. Analyse de la composition logicielle (SCA) pour détecter les vulnérabilités des dépendances (ex: npm audit). | Implémenté |
-| **4. Tests** | Validation fonctionnelle, d'intégration et de sécurité dynamique. | Exécution automatisée des tests unitaires et d'intégration. Analyse dynamique (DAST) ciblée sur les environnements de pré-production. | Implémenté |
-| **5. Déploiement** | Livraison applicative sur l'orchestrateur Kubernetes. | Validation de la configuration des manifestes (ex: interdiction des conteneurs privilégiés). Scan de vulnérabilités des images Docker avant déploiement. Terminaison TLS via Ingress Controller. | Implémenté |
-| **6. Opération** | Exécution et maintien en condition opérationnelle. | Délégation stricte de la gestion des identités et des accès (IAM) à Keycloak via les protocoles OAuth2 / OpenID Connect. Application du principe de moindre privilège. | Implémenté |
-| **7. Supervision** | Surveillance proactive de l'état de santé et des événements de sécurité. | Centralisation et formatage des journaux d'application (logs applicatifs). Configuration d'alertes sur les anomalies d'authentification (ex: codes HTTP 401/403 répétés). | Implémenté |
+Intégration continue de la sécurité ("Shift-Left") à chaque étape du cycle de développement logiciel (SDLC). Le processus couvre les exigences de la vision globale de "La Petite Maison de l'Épouvante" (E-commerce, Espace Communautaire, Streaming VOD, Enchères temps réel) tout en s'appuyant sur l'infrastructure Cloud-Native européenne cible.
 
-**Conclusion de l'analyse :** 
-La version 1 de l'application intègre les standards de sécurité modernes. La délégation de l'authentification à un fournisseur d'identité tiers (Keycloak), l'isolation par conteneurs non privilégiés et l'analyse automatisée des dépendances couvrent les exigences de sécurité minimales requises pour le déploiement en environnement managé.
+Le tableau ci-dessous détaille le processus DevSecOps. Les étapes marquées d'une étoile (⭐) sont appliquées et validées dans la Preuve de Concept (POC) du service Communauté.
+
+## 2. Intégration de la Sécurité dans le SDLC
+
+| Phase du Cycle (SDLC) | Objectif de la Phase globale | Mesures de Sécurité & Outils DevSecOps (Shift-Left) | Statut POC |
+| :--- | :--- | :--- | :---: |
+| **1. Planification** | Conception des Epics (E-commerce, VOD, Enchères) et modélisation architecturale. | • Modélisation des menaces (Threat Modeling) sur les flux financiers et temps réel (WebSockets).<br>• Conformité réglementaire : Hébergement Cloud Europe (RGPD) et normes d'accessibilité Front-end (RGAA). | ⭐ |
+| **2. Développement** | Écriture du code source des microservices (NestJS). | • Analyse statique continue via l'IDE (ex: SonarLint).<br>• Hooks de pré-validation (ex: `gitleaks`) pour interdire la soumission de secrets (clés d'API, credentials).<br>• Règles de codage sécurisé pour le système de chat et d'enchères. | ⭐ |
+| **3. Construction** | Compilation, conteneurisation et gestion des dépendances. | • Analyse de la composition logicielle (SCA) pour détecter les failles des paquets tiers (`npm audit`).<br>• Analyse statique (SAST) exécutée par le pipeline d'intégration continue (GitHub Actions). | ⭐ |
+| **4. Tests** | Validation fonctionnelle, intégration et robustesse. | • Exécution des tests unitaires et E2E (Jest).<br>• Validation de la montée en charge (Load Testing via Artillery) pour garantir la disponibilité sous attaques (DDoS).<br>• Analyse dynamique (DAST) ciblée sur les endpoints de la future API E-commerce. | ⭐ |
+| **5. Déploiement** | Livraison sur l'orchestrateur Kubernetes (Cloud Européen). | • Validation de sécurité des manifestes K8s (interdiction des privilèges `root` dans les conteneurs).<br>• Centralisation et terminaison du chiffrement TLS via l'Ingress Controller.<br>• Scan des images Docker avant leur instanciation. | ⭐ |
+| **6. Opération** | Maintien en conditions opérationnelles et gestion des accès. | • Externalisation stricte de la gestion des identités (IAM) au serveur Keycloak (OAuth2 / OIDC).<br>• Intégration d'un module de détection de fraudes (variation anormale de prix, vendeurs suspects).<br>• Injection des secrets via HashiCorp Vault ou Kubernetes Secrets. | ⭐ (IAM) |
+| **7. Supervision** | Surveillance des métriques, logs et événements de sécurité. | • Collecte et formatage des journaux d'application (Winston).<br>• Déclenchement automatisé de l'Autoscaler (HPA) en cas de surcharge CPU/RAM.<br>• Alerting automatisé sur les anomalies d'authentification (401/403) ou de fraude e-commerce. | ⭐ (HPA) |

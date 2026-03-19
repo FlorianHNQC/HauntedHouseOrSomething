@@ -1,44 +1,44 @@
-# Cartographie des Compétences et Plan de Formation de l'Équipe
+# Cartographie des Compétences et Plan de Formation
 
-**Projet :** Plateforme "La Petite Maison de l'Épouvante"
-**Rédacteur :** Lead Developer / Architecte Logiciel
-**Date :** 13 Mars 2026
+**Date :** 18 Mars 2026
 
-## 1. Contexte et Objectifs
+**Périmètre :** Transition vers l'architecture Cloud-Native (Microservices, Kubernetes, IAM).
 
-L'équipe d'ingénierie dédiée à la refonte de la plateforme se compose actuellement d'un Lead Developer (Architecte) et de deux développeurs juniors disposant de cinq années d'expérience acquises en alternance. 
+## 1. Contexte de l'Équipe
 
-Le passage d'un système d'information hétérogène et fragmenté vers une architecture Cloud-Native orientée microservices nécessite d'évaluer les compétences actuelles de l'équipe afin de garantir la maintenabilité, la sécurité et l'évolutivité de la solution technique.
+L'équipe d'ingénierie de "La Petite Maison de l'Épouvante" est composée de :
+*   **1 Lead Developer / Architecte** (Rôle actuel).
+*   **2 Développeurs Juniors** (5 ans d'expérience cumulée en alternance).
+
+L'évolution de l'infrastructure (monolithe historique vers microservices) et l'intégration de flux complexes (E-commerce, WebSockets, Sécurité OIDC) nécessitent une mise à niveau ciblée pour garantir l'autonomie de l'équipe.
 
 ## 2. Cartographie et Évaluation des Compétences
 
-La matrice ci-dessous évalue les compétences requises pour le projet sur une échelle de 1 (Débutant) à 3 (Expert/Référent).
+*Échelle d'évaluation : 1 (Notions/Débutant) - 2 (Autonome) - 3 (Expert/Référent)*
 
-| Domaine d'expertise technologique | Technologies concernées | Niveau Requis | Niveau du Lead Dev | Niveau des Juniors | Analyse de l'Écart (Gap) |
+| Domaine d'Expertise | Technologies cibles | Niveau Requis | Niveau Lead Dev | Niveau Juniors | Écart (Gap) |
 | :--- | :--- | :---: | :---: | :---: | :--- |
-| **Ingénierie Logicielle Backend** | TypeScript, NestJS, API REST | 3 | 3 | 2 | Mineur. Les bases algorithmiques et de programmation sont acquises. |
-| **Gestion des Données** | PostgreSQL, ORM, modélisation relationnelle et flexible (JSONB) | 2 | 3 | 2 | Mineur. Un accompagnement interne sur l'optimisation des requêtes sera suffisant. |
-| **Usine Logicielle (CI/CD)** | Pipelines automatisés, tests continus | 2 | 3 | 2 | Mineur. La montée en compétence s'effectuera par la pratique (pair-programming). |
-| **Gestion des Identités (IAM)** | Keycloak, OAuth2, OpenID Connect | **2** | 3 | **1** | **Critique. Les concepts de fédération d'identité nécessitent un apprentissage spécifique.** |
-| **Orchestration et Cloud-Native** | Docker, Kubernetes, Ingress, HPA | **2** | 3 | **1** | **Critique. Le paradigme du déploiement conteneurisé et orchestré n'est pas maîtrisé.** |
+| **Ingénierie Backend** | NestJS, TypeScript, API REST | 3 | 3 | 2 | **Faible**. Bases algorithmiques solides acquises en alternance. |
+| **Bases de Données** | PostgreSQL (ACID / JSONB) | 2 | 3 | 2 | **Faible**. Autonomie sur le CRUD, besoin d'appui sur l'optimisation. |
+| **Usine Logicielle** | GitHub Actions, CI/CD, Jest | 2 | 3 | 1.5 | **Moyen**. Montée en compétence réalisable en interne (Pair-programming). |
+| **Gestion des Identités** | Keycloak, OAuth 2.0, OIDC | **2** | 3 | **1** | **Critique**. La fédération d'identité et les flux de tokens sont méconnus. |
+| **Orchestration Cloud** | Kubernetes, Docker, HPA, Ingress | **2** | 3 | **1** | **Critique**. Le paradigme conteneurisé et le réseau K8s ne sont pas maîtrisés. |
 
-## 3. Analyse des Besoins et Stratégie de Montée en Compétences
+## 3. Analyse des Écarts
 
-Les développeurs juniors possèdent des fondations solides en développement applicatif, garantissant une productivité immédiate sur l'implémentation des fonctionnalités métier. Toutefois, l'analyse révèle un déficit critique concernant l'orchestration (Kubernetes) et la gestion de la sécurité externalisée (Keycloak). 
+Les développeurs juniors sont immédiatement opérationnels sur le développement des fonctionnalités métier (ex: Service Communauté). Cependant, la méconnaissance de l'orchestration (Kubernetes) et de la sécurisation déléguée (Keycloak) crée un risque de goulot d'étranglement ("Bus Factor" élevé centré sur le Lead Developer) lors des phases de déploiement et de configuration réseau.
 
-Afin de prévenir un risque de dépendance exclusive envers le Lead Developer (réduction du "Bus Factor") et d'assurer l'autonomie de l'équipe sur l'ensemble du cycle DevSecOps, une action de formation formelle est requise.
+## 4. Action de Formation Proposée
 
-## 4. Proposition d'Action de Formation
+Afin de combler cet écart de manière efficace (le budget n'étant pas restrictif), une action de formation formelle est planifiée.
 
-L'absence de contrainte budgétaire permet de privilégier une formation intensive et qualitative.
-
-*   **Intitulé de la formation :** Cursus d'Architecture Cloud-Native : Conteneurisation, Déploiement Kubernetes et Sécurité IAM.
-*   **Public visé :** Les deux développeurs juniors.
-*   **Format recommandé :** Formation intra-entreprise (présentiel ou distanciel synchrone) avec ateliers pratiques ciblés sur notre pile technologique.
-*   **Durée estimée :** 4 jours (28 heures).
-*   **Objectifs pédagogiques principaux :**
-    1.  Maîtriser le cycle de vie des conteneurs applicatifs et l'optimisation des descripteurs de déploiement (Dockerfiles).
-    2.  Administrer un cluster Kubernetes standard et y déployer des charges de travail (Pods, Services, Ingress Controllers, gestion des ConfigMaps et Secrets).
-    3.  Comprendre les mécanismes d'authentification modernes (flux OAuth2 et OIDC).
-    4.  Interfacer une application backend avec un serveur Keycloak pour la gestion des autorisations et la validation des jetons JWT.
-*   **Retour sur investissement attendu :** Autonomie opérationnelle de l'équipe sur la mise en production sécurisée des futurs services de la plateforme.
+*   **Intitulé :** *Bootcamp Architecture Cloud-Native : Déploiement Kubernetes et Sécurité IAM.*
+*   **Public visé :** Les 2 développeurs juniors.
+*   **Format :** Formation intra-entreprise (Ateliers pratiques sur l'infrastructure du projet).
+*   **Durée :** 4 jours (28 heures).
+*   **Objectifs pédagogiques :**
+    1. Conteneurisation avancée et optimisation des images Docker.
+    2. Administration de base Kubernetes (Déploiements, Services, Ingress Controllers, Gestion des Secrets).
+    3. Compréhension des protocoles OAuth 2.0 et OpenID Connect.
+    4. Interfaçage sécurisé entre une API NestJS et un royaume Keycloak.
+*   **Bénéfice attendu (ROI) :** Autonomie complète de l'équipe sur la chaîne de valeur, de l'écriture du code métier jusqu'à son déploiement sécurisé en production.
