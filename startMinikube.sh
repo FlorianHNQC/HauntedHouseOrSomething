@@ -41,3 +41,9 @@ minikube addons enable ingress
 minikube addons enable metrics-server
 
 echo -e "${GREEN}[SUCCÈS] Le cluster Minikube est prêt à recevoir vos déploiements !${NC}"
+
+# Redirection du contexte Docker vers Minikube
+eval $(minikube docker-env)
+
+# Construction de l'image depuis la racine du projet
+docker build -t maison-epouvante-api:latest ./service-communaute
